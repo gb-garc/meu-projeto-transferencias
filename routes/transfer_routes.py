@@ -5,15 +5,16 @@ from models.transfer_model import (
     solicitar_transferencia,
     autorizar_transferencia,
     concluir_transferencia,
-    cancelar_transferencia
+    cancelar_transferencia,
+    pegar_todos_funcionarios
 )
 
 router = APIRouter(prefix="/transferencias", tags=["Transferências"])
 security = HTTPBearer()  # Middleware de segurança para verificar tokens JWT
 
 @router.post("/usuarios/cadastrar")
-def cadastrar(username: str, senha: str):
-    sucesso, mensagem = cadastrar_usuario(username, senha)
+def cadastrar(username: str, password: str):
+    sucesso, mensagem = cadastrar_usuario(username, password)
     if not sucesso:
         raise HTTPException(status_code=400, detail=mensagem)
     return {"sucesso": True, "mensagem": mensagem}
@@ -59,3 +60,13 @@ def cancelar(id_transf: int, token: str = Depends(security)):
         raise HTTPException(status_code=401, detail=mensagem)
     sucesso, mensagem = cancelar_transferencia(id_transf)
     return {"sucesso": sucesso, "mensagem": mensagem}
+
+@router.get("/listafuncionarios")
+def listar_funcionarios(token: str = Depends(security)):
+    valido, mensagem = verificar_token(token.credentials)
+    if not valido:
+        raise HTTPException(status_code=401, detail=mensagem)
+    funcionarios = pegar_todos_funcionarios()
+    if funcionarios is None:
+        raise HTTPException(status_code=500, detail="Erro ao buscar funcionários")
+    return {"funcionarios": funcionarios}

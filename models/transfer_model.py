@@ -181,3 +181,27 @@ def cancelar_transferencia(id_transf):
     except Exception as e:
         print(f"Erro ao cancelar transferência: {e}")
         return (False, "Erro ao cancelar transferência.")
+
+
+def pegar_todos_funcionarios():
+    """
+    Busca todos os registros da tabela tblFuncionarios e retorna uma lista de dicionários.
+    """
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        # Executa a query para obter todos os registros
+        cur.execute("SELECT * FROM tblFuncionarios")
+        rows = cur.fetchall()
+        # Obtém os nomes das colunas a partir da descrição do cursor
+        columns = [desc[0] for desc in cur.description]
+        # Cria uma lista de dicionários onde cada registro é mapeado com o nome da coluna
+        funcionarios = [dict(zip(columns, row)) for row in rows]
+
+        cur.close()
+        conn.close()
+        return funcionarios
+
+    except Exception as e:
+        print(f"Erro ao buscar funcionários: {e}")
+        return None
