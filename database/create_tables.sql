@@ -1,8 +1,10 @@
---CREATE TABLE IF NOT EXISTS tbl_usuarios (
---    id SERIAL PRIMARY KEY,
---    username VARCHAR(50) UNIQUE NOT NULL,
---    password_hash TEXT NOT NULL
---);
+-- Criar tabela de usuários
+CREATE TABLE IF NOT EXISTS tbl_usuarios (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL
+);
+
 -- Criar tabela de Funcionários
 CREATE TABLE IF NOT EXISTS tblFuncionarios (
     id_func SERIAL PRIMARY KEY,
