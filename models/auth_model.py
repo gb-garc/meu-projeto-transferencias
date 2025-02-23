@@ -59,3 +59,23 @@ def verificar_token(token):
         return False, "Token expirado"
     except jwt.InvalidTokenError:
         return False, "Token inválido"
+
+def cadastrar_usuario(username, senha):
+    try:
+        # Gerar hash da senha
+        senha_hash = hash_senha(senha)
+        
+        # Conectar ao banco e inserir usuário
+        conn = get_connection()
+        cur = conn.cursor()
+
+        cur.execute("INSERT INTO tbl_usuarios (username, password_hash) VALUES (%s, %s)", (username, senha_hash))
+        conn.commit()
+
+        cur.close()
+        conn.close()
+        
+        return True, "Usuário cadastrado com sucesso!"
+    
+    except Exception as e:
+        return False, f"Erro ao cadastrar usuário: {str(e)}"
