@@ -57,6 +57,12 @@ while True:
         complementoURL=f"transferencias/cancelar/{id_transf}"
         response=requests.patch(URL_base+complementoURL, headers=headers)
         
+    elif escolha==7:
+        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {token}"}
+        complementoURL="transferencias/listafuncionarios"
+        response=requests.get(URL_base+complementoURL, headers=headers)
+        funcionarios=response.json()["funcionarios"]
+
     else:
         break
 

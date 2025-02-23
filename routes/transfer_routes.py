@@ -6,7 +6,8 @@ from models.transfer_model import (
     autorizar_transferencia,
     concluir_transferencia,
     cancelar_transferencia,
-    pegar_todos_funcionarios
+    pegar_todos_funcionarios,
+    pegar_funcionarios_por_obra
 )
 
 router = APIRouter(prefix="/transferencias", tags=["Transferências"])
@@ -67,6 +68,16 @@ def listar_funcionarios(token: str = Depends(security)):
     if not valido:
         raise HTTPException(status_code=401, detail=mensagem)
     funcionarios = pegar_todos_funcionarios()
+    if funcionarios is None:
+        raise HTTPException(status_code=500, detail="Erro ao buscar funcionários")
+    return {"funcionarios": funcionarios}
+
+@router.get("/listafuncionarios/{obra}")
+def listar_funcionarios_da_obra(obra:str,token:str=Depends(security)):
+    valido, mensagem = verificar_token(token.credentials)
+    if not valido:
+        raise HTTPException(status_code=401, detail=mensagem)
+    funcionarios = pegar_funcionarios_por_obra(obra)
     if funcionarios is None:
         raise HTTPException(status_code=500, detail="Erro ao buscar funcionários")
     return {"funcionarios": funcionarios}
