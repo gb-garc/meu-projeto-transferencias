@@ -20,7 +20,7 @@ while True:
         username=input("Nome do username: ")
         senha=input("Senha: ")
         complementoURL="transferencias/usuarios/cadastrar"
-        params={"username":username,"senha":senha}
+        params={"username":username,"password":senha}
         response=requests.post(URL_base + complementoURL,headers="",params=params)
         
     elif escolha==2:
